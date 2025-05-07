@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'authapp'
+    
+    'authappdjango'
 ]
 
 MIDDLEWARE = [
@@ -69,14 +70,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
+AUTH_USER_MODEL = 'authappdjango.CustomUser'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
  'default': {
  'ENGINE': 'django.db.backends.mysql',
- 'NAME': 'test',
+ 'NAME': 'test2',
  'USER': 'msadmin',
  'PASSWORD': '1234',
  'HOST': 'localhost',

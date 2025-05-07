@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Register</title>
+        <script src="{% static 'authapp/js/register.js' %}" defer></script>
+    </head>
+    <body>
+        <h2>Register</h2>
+        <form id="registerForm">
+            <input type="text" name="login" placeholder="Login"><br>
+            <input type="password" name="password" placeholder="Password"><br>
+            <br>
+                Пол
+            <br>
+            <input type="radio" name="gender" value="M"> Мужской
+            <input type="radio" name="gender" value="F">Женский
+            <br>
+            <button type="submit">Register</button>
+        </form>
+        <div id="result"></div>
+    </body>
+</html>
