@@ -5,7 +5,13 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login 
 from django.contrib.auth import get_user_model 
 from .models import CustomUser
-
+import os
+from authappdjango.models import Avatar
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+import base64
+from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.http import require_http_methods
 # Create your views here.
 def get_db_connection():
     return MySQLdb.connect(
@@ -41,9 +47,11 @@ def register_view(request):
         return render(request,'authapp/register.html')
 
     if request.method == 'POST':
+          
         login = request.POST.get('login')
         password = request.POST.get('password')
         gender = request.POST.get('gender')
+        image_file = request.FILES.get('image_file') 
 
         if not login or not password:
             return JsonResponse({'error':'Пустой логин или пароль'}, status = 400) 
@@ -58,4 +66,31 @@ def register_view(request):
         password=password,
         gender = gender
         )
+        if image_file:
+            image_data = image_file.read()
+        else:
+            def_path = os.path.join(settings.BASE_DIR,'authappdjango','static','avatar.jpg')
+            with open(def_path,'rb') as f:
+                image_data = f.read()
+        avatar = Avatar.objects.create(user = user, image = image_data)
         return JsonResponse({'success': 'Регистрация прошла успешно'})
+    
+    
+@login_required(login_url='/login/')
+@ensure_csrf_cookie
+def home_view(request):
+    avatar_base64 = None
+    try:
+        avatar = request.user.avatar.image
+        avatar_base64 = base64.b64encode(avatar).decode('utf-8')
+    except Exception as e:
+        print(e)
+        pass
+    return render(request, 'authapp/home.html', {
+        'avatar_base64': avatar_base64
+    })
+
+@require_http_methods(["POST"])
+def logout_view(request):
+    logout(request)
+    return JsonResponse({'status': 'success', 'message': 'Logged out'})

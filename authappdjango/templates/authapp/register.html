@@ -7,6 +7,7 @@
         <script src="{% static 'authapp/js/register.js' %}" defer></script>
     </head>
     <body>
+        {% if not user.username %}
         <h2>Register</h2>
         <form id="registerForm">
             <input type="text" name="login" placeholder="Login"><br>
@@ -17,8 +18,14 @@
             <input type="radio" name="gender" value="M"> Мужской
             <input type="radio" name="gender" value="F">Женский
             <br>
+            <br>
+            <input type="file" name="img_file">Загрузите фото
+            <br>
             <button type="submit">Register</button>
         </form>
+        {% else %}
+        <p>Вы уже вошли</p>
+        {% endif %}
         <div id="result"></div>
     </body>
 </html>
